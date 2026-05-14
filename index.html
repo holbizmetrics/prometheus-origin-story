@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>How I Accidentally Built a Self-Improving AI Research Architecture on My Daily Commute</title>
 <style>
   :root {
@@ -34,6 +34,7 @@
     font-size: 18px;
     line-height: 1.7;
     padding: 0;
+    overflow-x: hidden;
   }
 
   .progress-bar {
@@ -155,8 +156,8 @@
   /* Speech controls — floating */
   .speech-controls {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: max(20px, env(safe-area-inset-bottom, 20px));
+    right: max(20px, env(safe-area-inset-right, 20px));
     z-index: 60;
     display: flex;
     gap: 8px;
@@ -166,6 +167,8 @@
     padding: 8px 14px;
     box-shadow: 0 4px 20px var(--accent-glow);
     align-items: center;
+    box-sizing: border-box;
+    max-width: calc(100vw - 24px);
   }
   .speech-controls button {
     background: transparent;
@@ -484,7 +487,22 @@
     article { padding: 28px 16px 100px; }
     .kernel-box { padding: 28px 20px 20px; font-size: 0.82rem; }
     .artifact { padding: 22px 18px 16px; font-size: 0.78rem; }
-    .speech-controls { bottom: 12px; right: 12px; padding: 6px 10px; }
+    /* Speech controls: anchor to bottom-CENTER on mobile to clear iOS Safari toolbar + viewport edge */
+    .speech-controls {
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      bottom: max(80px, calc(env(safe-area-inset-bottom, 0px) + 70px));
+      padding: 6px 10px;
+      gap: 6px;
+    }
+    .speech-controls button {
+      font-size: 1rem;
+      padding: 4px 6px;
+      min-width: 32px;
+      min-height: 32px;
+      justify-content: center;
+    }
     .speech-controls .label { display: none; }
     .term .tip {
       max-width: calc(100vw - 32px);
